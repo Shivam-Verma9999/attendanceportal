@@ -1,0 +1,58 @@
+<div class="navbar">
+    Branch: <select id="branch">
+        <option value="" name="">Select Branch</option>
+        <% navdata.branches.forEach( branch => { %>
+        <option
+                name="<%= branch %>"
+                value="<%= branch %>"
+                <%= (branch === navdata.SearchBranch ? "selected" : "") %>
+        >
+            <%= branch %>
+        </option>
+        <% }); %>
+    </select>
+
+    Subject: <select id="subject">
+        <option value="" name="">Select Subject</option>
+        <% navdata.subjects.forEach( subject => { %>
+        <option
+                name="<%= subject %>"
+                value="<%= subject %>"
+                <%= (subject === navdata.SearchSubject ? "selected" : "") %>
+        >
+            <%= subject %>
+        </option>
+        <% }); %>
+    </select>
+
+    <input type="button" onclick="applyFilter();" value="Apply filter">
+
+    <script rel="text/javascript">
+
+        const initialBranchContainer = document.querySelector("#branch").value;
+        const initialSubjectContainer = document.querySelector("#subject").value;
+
+
+
+        const applyFilter = () => {
+            // console.log("CLICKED");
+            let branchContainer = document.querySelector("#branch").value;
+            let SubjectContainer = document.querySelector("#subject").value;
+
+            let queryString = "?";
+            if (branchContainer.length > 0) {
+                queryString += `branch=${branchContainer}&`;
+            }
+            if (SubjectContainer.length > 0) {
+                queryString += `subject=${SubjectContainer}&`;
+            }
+
+            if (initialSubjectContainer !== SubjectContainer || initialBranchContainer !== branchContainer ) {
+                window.open(`/${queryString}`, "_self");
+                // console.log(queryString);
+            }
+
+        };
+    </script>
+
+</div>

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, <%= Date.now() %>">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Document</title>
+
+    <style>
+        .container {
+            /*height: 200px;*/
+            overflow: scroll;
+            /*width: 500px;*/
+            margin: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: solid 1px #dddddd;
+        }
+
+        th, td {
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
+        td {
+            border: 1px solid #bfbbbb;
+        }
+
+        th {
+            position: sticky;
+            top: -1px;
+            z-index: 1;
+            background: aquamarine;
+            font-size: 1rem;
+            font-weight: normal;
+
+        }
+
+        tbody tr td:first-of-type, tr th:first-of-type {
+            position: sticky;
+            left: -1px;
+            z-index: 3;
+            background: aliceblue;
+        }
+        th:first-of-type{
+            top: -1px;
+            z-index: 4 !important;
+        }
+        th:last-of-type {
+            position: sticky;
+            right: -1px;
+            z-index: 3;
+
+        }
+
+        tbody tr td:last-of-type {
+            position: sticky;
+            right: -1px;
+            z-index: 3;
+        }
+
+        td:last-of-type, th:last-of-type {
+            background: #dbdbdb;
+        }
+    </style>
+
+</head>
+<body>
+
+    <%- include('../partials/header', {})%>
+    <%- include('../partials/nav', {navdata})%>
+<%
+let attendance = studentData;
+console.log(navdata);
+attendance.sort((stdobj1, stdobj2) => {
+    return stdobj1.roll < stdobj2.roll ? -1 : 1;
+});
+// console.log(attendance);
+// sorting attendance array based on roll number
+
+let classDates = [];
+
+//inserting dates on which classes were held.
+attendance.forEach(({records}) => {
+
+    records.forEach(date => {
+        if (classDates.indexOf(date) === -1) {
+            classDates.push(date);
+        }
+    });
+
+});
+
+// sorting all dates on which classes were held.
+classDates.sort((date1, date2) => {
+    return new Date(date1) > new Date(date2) ? 1 : -1;
+})
+%>
+
+<div class="container">
+    <% if(attendance.length > 0) {%>
+    <table>
+        <thead>
+        <tr>
+            <th>Roll Number</th>
+            <th>Name</th>
+            <% classDates.forEach( date =>{ %>
+                <th><%= date %></th>
+            <% }); %>
+            <th>total=<%= classDates.length %></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <% attendance.forEach( ({name, roll, records})=>{ %>
+            <tr>
+                <td><%= roll %></td>
+                <td><%= name %></td>
+                <% console.log(roll); %>
+                <% let totalPresent = 0;
+                classDates.forEach(date=>{ %>
+                    <td>
+                        <%= (function () {
+                            if (records.indexOf(date) !== -1) {
+                                totalPresent++;
+                                return '1';
+                            } else {
+                                return '';
+                            }
+                        })(); %>
+                    </td>
+                <% }); %>
+                <td><%= totalPresent %></td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+    <% }else {%>
+    <p>No data found regarding your query</p>
+    <%}%>
+</div>
+
+</body>
+</html>
