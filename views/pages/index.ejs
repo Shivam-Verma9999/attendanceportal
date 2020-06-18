@@ -5,7 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, <%= Date.now() %>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./stylesheets/style.css"/>
     <title>Document</title>
 
     <style>
@@ -13,12 +14,13 @@
             /*height: 200px;*/
             overflow: scroll;
             /*width: 500px;*/
-            margin: auto;
+            padding-left: 20px;
         }
 
         table {
             border-collapse: collapse;
             border: solid 1px #dddddd;
+            max-width: 100vw;
         }
 
         th, td {
@@ -46,10 +48,12 @@
             z-index: 3;
             background: aliceblue;
         }
-        th:first-of-type{
+
+        th:first-of-type {
             top: -1px;
             z-index: 4 !important;
         }
+
         th:last-of-type {
             position: sticky;
             right: -1px;
@@ -71,8 +75,6 @@
 </head>
 <body>
 
-    <%- include('../partials/header', {})%>
-    <%- include('../partials/nav', {navdata})%>
 <%
 let attendance = studentData;
 console.log(navdata);
@@ -101,47 +103,54 @@ classDates.sort((date1, date2) => {
 })
 %>
 
-<div class="container">
-    <% if(attendance.length > 0) {%>
-    <table>
-        <thead>
-        <tr>
-            <th>Roll Number</th>
-            <th>Name</th>
-            <% classDates.forEach( date =>{ %>
-                <th><%= date %></th>
-            <% }); %>
-            <th>total=<%= classDates.length %></th>
-        </tr>
-        </thead>
-        <tbody>
+<!--Header-->
+<%- include('../partials/header', {}) %>
 
-        <% attendance.forEach( ({name, roll, records})=>{ %>
+
+<div class="container">
+    <!--filtering bar-->
+    FILTERS: <%- include('../partials/nav', {navdata}) %>
+
+    <% if(attendance.length > 0) { %>
+        <table>
+            <thead>
             <tr>
-                <td><%= roll %></td>
-                <td><%= name %></td>
-                <% console.log(roll); %>
-                <% let totalPresent = 0;
-                classDates.forEach(date=>{ %>
-                    <td>
-                        <%= (function () {
-                            if (records.indexOf(date) !== -1) {
-                                totalPresent++;
-                                return '1';
-                            } else {
-                                return '';
-                            }
-                        })(); %>
-                    </td>
+                <th>Roll Number</th>
+                <th>Name</th>
+                <% classDates.forEach( date =>{ %>
+                    <th><%= date %></th>
                 <% }); %>
-                <td><%= totalPresent %></td>
+                <th>total=<%= classDates.length %></th>
             </tr>
-        <% }) %>
-        </tbody>
-    </table>
-    <% }else {%>
-    <p>No data found regarding your query</p>
-    <%}%>
+            </thead>
+            <tbody>
+
+            <% attendance.forEach( ({name, roll, records})=>{ %>
+                <tr>
+                    <td><%= roll %></td>
+                    <td><%= name %></td>
+                    <% console.log(roll); %>
+                    <% let totalPresent = 0;
+                    classDates.forEach(date=>{ %>
+                        <td>
+                            <%= (function () {
+                                if (records.indexOf(date) !== -1) {
+                                    totalPresent++;
+                                    return '1';
+                                } else {
+                                    return '';
+                                }
+                            })(); %>
+                        </td>
+                    <% }); %>
+                    <td><%= totalPresent %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    <% }else { %>
+        <p>No data found regarding your query</p>
+    <% } %>
 </div>
 
 </body>
