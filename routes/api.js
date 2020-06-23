@@ -1,7 +1,7 @@
 const apiRouter = require('express').Router();
 const mongoose = require('mongoose');
 
-const studentSchema = require('../schema/attendanceSchema');
+const studentSchema = require('../schema/studentSchema');
 
 const studentModel = mongoose.model('student', studentSchema);
 

@@ -74,10 +74,25 @@
 
 </head>
 <body>
+<script>
 
+    <%if(loggedIn) {
+        console.log("IN THE LOGGEEERRRRRR", loggedIn);
+    %>
+        document.cookie = "loggedIn=true";
+    <%}%>
+
+
+    if(document.cookie.indexOf("loggedIn") === -1){
+        window.open("login", "_self");
+    }else{
+        console.log("Logged IN");
+    }
+
+</script>
 <%
 let attendance = studentData;
-console.log(navdata);
+
 attendance.sort((stdobj1, stdobj2) => {
     return stdobj1.roll < stdobj2.roll ? -1 : 1;
 });
@@ -129,7 +144,7 @@ classDates.sort((date1, date2) => {
                 <tr>
                     <td><%= roll %></td>
                     <td><%= name %></td>
-                    <% console.log(roll); %>
+
                     <% let totalPresent = 0;
                     classDates.forEach(date=>{ %>
                         <td>
